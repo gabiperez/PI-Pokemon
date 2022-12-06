@@ -9,31 +9,39 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
 
-    ID: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
     },
 
-    HP: {
-      type: DataTypes.DECIMAL,
+    life: {
+      type: DataTypes.INTEGER,
     },
 
-    AP: {
-      type: DataTypes.DECIMAL,
+    attack: {
+      type: DataTypes.INTEGER,
+    },
+
+    defense: {
+      type: DataTypes.INTEGER,
     },
 
     speed: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.INTEGER,
     },
 
     height: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.INTEGER,
     },
 
     weight: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.INTEGER,
+    },
+
+    img: {
+      type: DataTypes.STRING,
     },
   });
 };
