@@ -116,7 +116,6 @@ export const cleanDetail = (dispatch) => {
     })
 };
 
-
 export const postPokemon = (payload) => {
     return async () => {
         try {

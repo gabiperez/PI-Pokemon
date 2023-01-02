@@ -28,7 +28,6 @@ const rootReducer = (state = initialState, action) => {
                 pokemons: action.payload,
                 allPokemons: action.payload
             };
-
         case CLEAN_POKEMONS:
             return {
                 ...state,
@@ -66,19 +65,16 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 pokemons: action.payload
             };
-
         case GET_DETAILS:
             return {
                 ...state,
                 pokeDetail: action.payload
             }
-
         case CLEAN_DETAIL:
             return {
                 ...state,
                 pokeDetail: action.payload
             }
-
         case POST_POKEMON:
             return {
                 ...state
