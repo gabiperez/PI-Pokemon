@@ -1,113 +1,106 @@
 const axios = require('axios');
 const { Pokemon, Type } = require('../db');
 
-//traigo de API
-async function getPokeApi() {
-  const arrPoke = [];
-  const firstPokeApi = await axios('https://pokeapi.co/api/v2/pokemon');
-  const secPokeApi = await axios(firstPokeApi.data.next);
+//TRAIGO DATOS DE LA API, HAGO OTRO LLAMADO Y TRAIGO DATOS (NOMBRE, IMAGEN, TIPO).
+const getApiInfo = async () => {
+    try {
+        let url = 'https://pokeapi.co/api/v2/pokemon/';
+        let pokemones = [];
+        do {
+            let info = await axios.get(url);
+            let pokemonesApi = info.data;
+            let auxPokemones = pokemonesApi.results.map(e => {
+                return {
+                    name: e.name,
+                    url: e.url,
+                }
+            })
+            pokemones.push(...auxPokemones);
+            url = pokemonesApi.next;
+        } while (url != null && pokemones.length < 40); //LIMITO LA CANTIDAD DE POKEMONS
+        // console.log(pokemones);
+        let pokesWithData = await Promise.all(pokemones.map(async e => {
+            let pokemon = await axios.get(e.url);
+            return {
+                id: pokemon.data.id,
+                name: pokemon.data.name,
+                img: pokemon.data.sprites.other.home.front_default,
+                types: pokemon.data.types.map(e => {
+                    return ({
+                        name: e.type.name,
+                        img: `https://typedex.app/images/ui/types/light/${e.type.name}.svg`,
+                    })
+                }),
+                hp: pokemon.data.stats[0].base_stat,
+                attack: pokemon.data.stats[1].base_stat,
+                defense: pokemon.data.stats[2].base_stat,
+                speed: pokemon.data.stats[5].base_stat,
+                height: pokemon.data.height,
+                weight: pokemon.data.weight,
+            }
+        }));
+        // console.log(pokesWithData);
+        return pokesWithData;
+    } catch (e) {
+        console.log(e);
+    };
+};
 
-  const firstPokeUrl = firstPokeApi.data.results.map((e) => e.url);
-  const secPokeUrl = secPokeApi.data.results.map((e) => e.url);
+//TRAIGO POKEMON POR PARAMS (ID) / O QUERY (NAME) CON DATOS PARA DETAIL.
+async function getPokemonDetail(arg) {
+    try {
+        const apiData = await axios.get(`https://pokeapi.co/api/v2/pokemon/${arg}`);
+        const data = await apiData.data;
+        const pokemonData = {
+            id: data.id,
+            name: data.name,
+            img: data.sprites.other.home.front_default,
+            types: data.types.map(e => {
+                return ({
+                    name: e.type.name,
+                    img: `https://typedex.app/images/ui/types/dark/${e.type.name}.svg`,
+                })
+            }),
+            hp: data.stats[0].base_stat,
+            attack: data.stats[1].base_stat,
+            defense: data.stats[2].base_stat,
+            speed: data.stats[5].base_stat,
+            height: data.height,
+            weight: data.weight,
+        };
+        return pokemonData;
+    } catch (e) {
+        console.log(e);
+    };
+};
 
-  const allPokeUrl = firstPokeUrl.concat(secPokeUrl);
-  const allPromise = await Promise.all(allPokeUrl);
 
-  for (i = 0; i < allPromise.length; i++) {
-    const url = await axios(allPromise[i]);
-    arrPoke.push({
-      id: url.data.id,
-      name: url.data.name,
-      types: url.data.types.map((e) => e.type.name),
-      img: url.data.sprites.front_default,
-      attack: url.data.stats[1].base_stat,
+
+
+//TRAIGO POKEMONES DE DB, Y INCLUYA LA TABLA TYPE CON SU ATRIBUTO NAME.
+const getDbInfo = async () => {
+    return await Pokemon.findAll({
+        include: {
+            model: Type,
+            attributes: ['name'],
+            through: {
+                attributes: [],
+            },
+        }
     });
-  }
-  return arrPoke;
-}
+};
 
-//traigo de Db
-async function getPokeDb() {
-  let pokeDb = Pokemon.findAll({
-    include: {
-      model: Type,
-      attributes: ['name'],
-      through: {
-        attributes: [],
-      },
-    },
-  });
-  return pokeDb;
-}
-
-//combino API y Db en una var
-async function getAllPoke() {
-  const apiInfo = await getPokeApi();
-  const dbInfo = await getPokeDb();
-
-  const getAllPoke = apiInfo.concat(dbInfo);
-  return getAllPoke;
-}
-
-async function getType() {
-  const { data } = await axios.get('https://pokeapi.co/api/v2/type');
-
-  return data.results.map((type) => type.name);
-}
-
-async function findPokeInApi(name) {
-  let existPokeInApi = await axios
-    .get(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase().trim()}`)
-    .catch(() => {
-      return false;
-    });
-  if (existPokeInApi) return true;
-}
-
-async function createPoke(
-  name,
-  life,
-  attack,
-  defense,
-  speed,
-  height,
-  weight,
-  type,
-  img,
-  createDb
-) {
-  if (await findPokeInApi(name))
-    throw new Error(`"${name}"  already exists, try another name`);
-
-  let existPokeInDb = await Pokemon.findOne({ where: { name } });
-  if (existPokeInDb)
-    throw new Error(`"${PokemonInDb.name}"  already exists, try another name`);
-
-  const pokemonCreate = await Pokemon.create({
-    name: name.toLowerCase(),
-    life: parseInt(life, 10),
-    attack: parseInt(attack, 10),
-    defense: parseInt(defense, 10),
-    speed: parseInt(speed, 10),
-    height: parseInt(height, 10),
-    weight: parseInt(weight, 10),
-    img: img,
-    createDb: createDb,
-  });
-
-  getPokeTypes(); //eliminar una vez q el force este true
-  let typesDb = await Types.findAll({
-    where: { name: type },
-  });
-
-  await pokemonCreate.addTypes(typesDb);
-  //si o si hay q elegir un tipo de pokeweon
-  return pokemonCreate;
-}
+//TRAIGO TODOS LOS POKEMONES, API + DB.
+const getAllPokemon = async () => {
+    const apiInfo = await getApiInfo();
+    const dbInfo = await getDbInfo();
+    const allPokemon = apiInfo.concat(dbInfo);
+    return allPokemon;
+};
 
 module.exports = {
-  getAllPoke,
-  getType,
-  createPoke,
-  //getPokeById
-};
+    getApiInfo,
+    getDbInfo,
+    getAllPokemon,
+    getPokemonDetail
+}
