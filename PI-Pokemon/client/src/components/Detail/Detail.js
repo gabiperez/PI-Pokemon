@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
@@ -20,17 +21,25 @@ const Detail = (props) => {
     }, [dispatch, props.match.params.id])
 
 
-    return ( 
+    return (
         <div>
             {
                 myPokemon.length > 0 ?
-                <div className={styles.container}>
-                    <div className={styles.card}>
-                        <h2 className={styles.h2}>{myPokemon[0].name.charAt(0).toUpperCase() + myPokemon[0].name.slice(1)}</h2>
-                        <p className={styles.p}>#{myPokemon[0].id}</p>
-                        <img src={myPokemon[0].img ? myPokemon[0].img : noImage} alt="img not found" height="250px" width="200px" />
-                        <div className={styles.types}>
-                            <h3>{myPokemon[0].types?.map((e, k) => {
+                    <div className={styles.container}>
+                        <div className={styles.card}>
+                            <h2 className={styles.h2}>{myPokemon[0].name.charAt(0).toUpperCase() + myPokemon[0].name.slice(1)}</h2>
+                            <p className={styles.p}>#{myPokemon[0].id}</p>
+                            <img className={styles.pokeImg} src={myPokemon[0].img ? myPokemon[0].img : noImage} alt="img not found" height="250px" width="200px" />
+                            {/* <div className={details}> */}
+                            <li className={styles.h5}>HP:  {myPokemon[0].hp}</li>
+                            <li className={styles.h5}>Attack:  {myPokemon[0].attack}</li>
+                            <li className={styles.h5}>Defense:  {myPokemon[0].defense}</li>
+                            <li className={styles.h5}>Speed:  {myPokemon[0].speed}</li>
+                            <li className={styles.h5}>Height:  {myPokemon[0].height}</li>
+                            <li className={styles.h5}>Weight:  {myPokemon[0].weight}</li>
+                            {/* </div> */}
+                            <div className={styles.types}>
+                                <h3>{myPokemon[0].types?.map((e, k) => {
                                     return (
                                         <div className={styles.types} key={k}>
                                             <img className={styles.typesImg} src={e.img} alt='X' />
@@ -38,27 +47,23 @@ const Detail = (props) => {
                                         </div>
                                     )
                                 })} </h3>
+                            </div>
+
+
                         </div>
-                        <h5 className={styles.h5}>HP:  {myPokemon[0].hp}</h5>
-                        <h5 className={styles.h5}>Attack:  {myPokemon[0].attack}</h5>
-                        <h5 className={styles.h5}>Defense:  {myPokemon[0].defense}</h5>
-                        <h5 className={styles.h5}>Speed:  {myPokemon[0].speed}</h5>
-                        <h5 className={styles.h5}>Height:  {myPokemon[0].height}</h5>
-                        <h5 className={styles.h5}>Weight:  {myPokemon[0].weight}</h5>
+                    </div> :
+                    <div>
+                        <Loading />
                     </div>
-                </div> : 
-                <div>
-                    <Loading />
-                </div>
             }
             <div>
-            <Link to='/home'>
-                <button className={styles.btn}>Go back</button>
-            </Link>
+                <Link to='/home'>
+                    <button className={styles.btn}>Go back</button>
+                </Link>
             </div>
         </div>
-        
-     );
+
+    );
 }
- 
+
 export default Detail;

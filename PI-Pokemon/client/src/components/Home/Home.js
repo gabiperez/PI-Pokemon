@@ -15,6 +15,7 @@ export default function Home() {
     //Paginado 
     const [currentPage, setCurrentPage] = useState(1);
     const pokemonsPerPage = 12;
+    const [order, setOrder] = useState(''); //Para modificar el estado local y me ayude al renderizado
 
     const indexOfLastPokemon = currentPage * pokemonsPerPage;
     const indexOfFirstPokemon = indexOfLastPokemon - pokemonsPerPage;
@@ -29,6 +30,11 @@ export default function Home() {
         dispatch(getPokemons())
     }, [dispatch])
 
+    const handleClick = (e) => {
+        e.preventDefault();
+        dispatch(cleanPokemons(dispatch));
+        dispatch(getPokemons());
+    }
 
     return (
         <div>
@@ -37,7 +43,8 @@ export default function Home() {
                     <Nav />
                     <div className={styles.home}>
                         <div className={styles.filters}>
-                            <Filters />
+                            <Filters setCurrentPage={setCurrentPage} setOrder={setOrder} />
+                            <button className={styles.btn} onClick={e => { handleClick(e) }}>Clear filters</button>
                         </div>
                         <div>
                             <div className={styles.cards}>

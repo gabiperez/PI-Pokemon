@@ -28,7 +28,7 @@ const getApiInfo = async () => {
                 types: pokemon.data.types.map(e => {
                     return ({
                         name: e.type.name,
-                        img: `https://typedex.app/images/ui/types/light/${e.type.name}.svg`,
+                        img: `https://typedex.app/app/images/ui/types/light/${e.type.name}.svg`,
                     })
                 }),
                 hp: pokemon.data.stats[0].base_stat,
@@ -77,7 +77,7 @@ async function getPokemonDetail(arg) {
 
 
 
-//TRAIGO POKEMONES DE DB, Y INCLUYA LA TABLA TYPE CON SU ATRIBUTO NAME.
+//TRAIGO POKEMONES DE DB, Y LA TABLA TYPE CON SU ATRIBUTO NAME.
 const getDbInfo = async () => {
     return await Pokemon.findAll({
         include: {

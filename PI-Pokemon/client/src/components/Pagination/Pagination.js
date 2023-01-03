@@ -1,14 +1,14 @@
 import React from "react";
 import styles from './Pagination.module.css'
 
-const Pagination = ({pokemonsPerPage, allPokemons, pagination}) => {
+const Pagination = ({ pokemonsPerPage, allPokemons, pagination }) => {
 
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(allPokemons/pokemonsPerPage); i++) {
-        pageNumbers.push(i);        
+    for (let i = 1; i <= Math.ceil(allPokemons / pokemonsPerPage); i++) {
+        pageNumbers.push(i);
     }
 
-    return ( 
+    return (
         <nav>
             <ul className={styles.list}>
                 {
@@ -20,7 +20,7 @@ const Pagination = ({pokemonsPerPage, allPokemons, pagination}) => {
                 }
             </ul>
         </nav>
-     );
+    );
 }
- 
+
 export default Pagination;
