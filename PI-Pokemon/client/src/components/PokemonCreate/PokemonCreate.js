@@ -180,7 +180,7 @@ const PokemonCreate = () => {
               return (
                 <div className={styles.typesSelect} key={e}>
                   <p className={styles.pTypes}>{e}</p>
-                  <button className={styles.btnDelete} onClick={() => { handleDelete(e) }}>x</button>
+                  <button className={styles.btnDelete} onClick={() => { handleDelete(e) }}>X</button>
                 </div>
               )
             }) //para poder ver que fui seleccionando
