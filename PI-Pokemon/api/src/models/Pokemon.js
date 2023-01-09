@@ -17,7 +17,7 @@ module.exports = (sequelize) => {
     hp: {
       type: DataTypes.STRING,
     },
-    añññññack: {
+    attack: {
       type: DataTypes.STRING,
     },
     defense: {

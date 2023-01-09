@@ -58,7 +58,7 @@ async function getPokemonDetail(arg) {
             types: data.types.map(e => {
                 return ({
                     name: e.type.name,
-                    img: `https://typedex.app/images/ui/types/dark/${e.type.name}.svg`,
+                    img: `https://typedex.app/app/images/ui/types/light/${e.type.name}.svg`,
                 })
             }),
             hp: data.stats[0].base_stat,

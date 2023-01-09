@@ -58,26 +58,25 @@ const Filters = ({ setCurrentPage, setOrder }) => {
         <label className={styles.label}>Types</label>
         <select className={styles.select} onChange={e => { handleFilterType(e) }}>
           <option value='all'>ALL</option>
-          {
-            allTypes?.map(e => {
-              return (
-                <option key={e.id} value={e.name}>{e.name.toUpperCase()}</option>
-              )
-            })
+          {allTypes?.map(e => {
+            return (
+              <option key={e.id} value={e.name}>{e.name.toUpperCase()}</option>
+            )
+          })
           }
         </select>
       </div>
 
       <div>
         <h4 className={styles.h4}>Order</h4>
-        <label className={styles.order}>Strength</label>
+        <label className={styles.label}>Strength</label>
         <select className={styles.select} onChange={e => handleFilterStr(e)} onBlur={e => handleFilterStr(e)}>
           <option value="all"> ALL </option>
           <option value="asc" >ASC</option>
           <option value="desc" >DESC</option>
         </select>
         {/* <option className={styles.order}>Alphabetically</option> */}
-        <label className={styles.order}>Name</label>
+        <label className={styles.label}>Name</label>
         <select className={styles.select} onChange={e => handleOrderName(e)} onBlur={e => handleOrderName(e)}>
           <option value="asc" >A - Z</option>
           <option value="desc" >Z - A</option>

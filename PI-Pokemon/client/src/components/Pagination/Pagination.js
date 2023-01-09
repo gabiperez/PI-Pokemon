@@ -1,7 +1,8 @@
 import React from "react";
 import styles from './Pagination.module.css'
 
-const Pagination = ({ pokemonsPerPage, allPokemons, pagination }) => {
+
+const Pagination = ({ pokemonsPerPage, allPokemons, pagination, currentPage }) => {
 
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(allPokemons / pokemonsPerPage); i++) {
@@ -19,8 +20,9 @@ const Pagination = ({ pokemonsPerPage, allPokemons, pagination }) => {
                     ))
                 }
             </ul>
+            <div className={styles.pagnr}>{`   Actual Page ${currentPage}`}</div>
         </nav>
     );
 }
-
 export default Pagination;
+

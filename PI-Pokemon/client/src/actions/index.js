@@ -116,16 +116,28 @@ export const cleanDetail = (dispatch) => {
     })
 };
 
+
+
+// export function postPokemon(payload) {
+//     return async function (dispatch) {
+//         try {
+//             await axios.post(`/pokemons`, payload);
+//         } catch (err) {
+//             window.alert(err.response.data);
+//         }
+//     };
+// }
 export const postPokemon = (payload) => {
     return async () => {
         try {
             var createPoke = await axios.post('http://localhost:3001/pokemons', payload);
-            console.log(createPoke);
+            //console.log(createPoke);        http://localhost:3001
             alert('New pokemón is created!');
             return createPoke;
         } catch (e) {
+            window.alert(e.response.data)
             alert('Pokemon name already exist')
-            console.log(e);
+            // console.log(e);
         }
     };
 };

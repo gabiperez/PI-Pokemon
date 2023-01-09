@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
     try {
         if (name) {
             const allPoke = await getAllPokemon();
-            const isPoke = allPoke.find(e => e.name === name.toLowerCase());
+            const isPoke = await allPoke.find(e => e.name === name.toLowerCase());
             if (!isPoke) {
                 const pokemon = await Pokemon.create({
                     name,
@@ -51,7 +51,6 @@ router.post('/', async (req, res) => {
                     weight,
                     img
                 });
-
                 const typeDb = await Type.findAll({
                     where: {
                         name: types,

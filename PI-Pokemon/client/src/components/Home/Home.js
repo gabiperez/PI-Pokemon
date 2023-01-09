@@ -68,6 +68,7 @@ export default function Home() {
                                     pokemonsPerPage={pokemonsPerPage}
                                     allPokemons={allPokemons.length}
                                     pagination={pagination}
+                                    currentPage={currentPage}
                                 />
                             </div>
                         </div>
