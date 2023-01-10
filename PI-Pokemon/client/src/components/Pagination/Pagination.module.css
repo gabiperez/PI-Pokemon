@@ -18,7 +18,6 @@
     width: 30px;
     height: 30px;
     padding: 4px;
-    background-color: #f3cf3d4d;
 }
 
 .a {
@@ -27,6 +26,19 @@
     font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
+    text-align: center;
+    list-style: none;
+    border: 1px solid #f3cf3d4d;
+    border-radius: 50%;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 4px;
+    background-color: #f3cf3d4d;
+}
+.a:hover {
+    color: white;
+    background-color: rgba(48, 30, 9, 0.616)
 }
 
 .pagnr{

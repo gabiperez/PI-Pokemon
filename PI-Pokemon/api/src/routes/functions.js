@@ -98,9 +98,11 @@ const getAllPokemon = async () => {
     return allPokemon;
 };
 
+
 module.exports = {
     getApiInfo,
     getDbInfo,
     getAllPokemon,
-    getPokemonDetail
+    getPokemonDetail,
+
 }

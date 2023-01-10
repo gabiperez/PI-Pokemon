@@ -121,7 +121,10 @@ export const cleanDetail = (dispatch) => {
 // export function postPokemon(payload) {
 //     return async function (dispatch) {
 //         try {
-//             await axios.post(`/pokemons`, payload);
+//             var createPoke = await axios.post(`http://localhost:3001/pokemons`, payload);
+//             console.log(createPoke)
+//             alert('New pokemón is created!');
+//             return createPoke;
 //         } catch (err) {
 //             window.alert(err.response.data);
 //         }
@@ -131,7 +134,7 @@ export const postPokemon = (payload) => {
     return async () => {
         try {
             var createPoke = await axios.post('http://localhost:3001/pokemons', payload);
-            //console.log(createPoke);        http://localhost:3001
+            console.log(createPoke);
             alert('New pokemón is created!');
             return createPoke;
         } catch (e) {
