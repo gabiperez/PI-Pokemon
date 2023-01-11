@@ -7,9 +7,9 @@ const { getListOfPokemons } = require('./routes/functions');
 require('./db.js');
 
 (async () => {
-  // Para no esperar media hora en cada request a pokeapi.co voy a cargar los 40 pokemon al iniciar la app y dsp gg, easy
+  // Para no esperar en cada request a pokeapi cargo los 40 pokemon al iniciar la app.
   const fourthyKokemone = await getListOfPokemons();
-  console.info('kokemone carga2');
+  console.info('pokemones cargados');
   process.env.fourthyKokemone = JSON.stringify(fourthyKokemone);
 })();
 
