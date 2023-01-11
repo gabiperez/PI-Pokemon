@@ -6,14 +6,15 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     const { name } = req.query;
-    const allPokesName = await getAllPokemon();
+    const allPokesName = await getAllPokemon(name);
+
     try {
         if (name) {
+            console.info(allPokesName);
             let poke = allPokesName.filter(e => e.name.toLowerCase() === name.toLowerCase());
             poke.length ? res.status(200).send(poke) : res.status(404).send('Pokemon not found');
         } else {
-            let pokemons = await getAllPokemon();
-            return res.status(200).send(pokemons);
+            return res.status(200).send(allPokesName);
         }
     } catch (e) {
         console.log(e);
@@ -36,34 +37,42 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const { name, hp, attack, defense, speed, height, weight, img, types } = req.body;
+
     try {
-        if (name) {
-            const allPoke = await getAllPokemon();
-            const isPoke = allPoke.find(e => e.name === name.toLowerCase());
-            if (!isPoke) {
-                const pokemon = await Pokemon.create({
-                    name,
-                    hp,
-                    attack,
-                    defense,
-                    speed,
-                    height,
-                    weight,
-                    img
-                });
-                const typeDb = await Type.findAll({
-                    where: {
-                        name: types,
-                    }
-                });
-                pokemon.addType(typeDb);
-                return res.status(201).send(pokemon);
-            }
-            return res.status(404).send('Pokemon name already exist')
+        if (!name) return res.status(400).send('Pokemon name is mandatory');
+
+        const allPoke = await getAllPokemon(name);
+        const exists = allPoke.length > 0;
+
+        if (exists) {
+            return res.status(409).send('Pokemon name already exists')
         }
-        if (!name) return res.status(404).send('Pokemon name is obligatory');
+
+        const pokemon = await Pokemon.create({
+            name,
+            hp,
+            attack,
+            defense,
+            speed,
+            height,
+            weight,
+            img
+        });
+
+        const pokemonTypes = await Type.findAll({
+            where: {
+                name: types,
+            }
+        });
+
+        pokemon.addType(pokemonTypes);
+
+        await pokemon.save();
+
+        return res.status(201).send(pokemon);
     } catch (e) {
         console.log(e);
+        return res.status(500).send(e);
     }
 });
 

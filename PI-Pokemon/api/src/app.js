@@ -2,8 +2,16 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
+const { getListOfPokemons } = require('./routes/functions');
 
 require('./db.js');
+
+(async () => {
+  // Para no esperar media hora en cada request a pokeapi.co voy a cargar los 40 pokemon al iniciar la app y dsp gg, easy
+  const fourthyKokemone = await getListOfPokemons();
+  console.info('kokemone carga2');
+  process.env.fourthyKokemone = JSON.stringify(fourthyKokemone);
+})();
 
 const server = express();
 

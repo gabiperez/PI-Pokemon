@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from 'react-router-dom';
-import { getAlltypes, postPokemon, cleanPokemons } from '../../actions';
+import { getAlltypes, postPokemon, cleanPokemons, POST_POKEMON } from '../../actions';
 import { useDispatch, useSelector } from "react-redux";
 import styles from './PokemonCreate.module.css'
 
@@ -80,7 +80,7 @@ const PokemonCreate = () => {
     }
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (
@@ -94,7 +94,13 @@ const PokemonCreate = () => {
       !errors.img
     ) {
 
-      dispatch(postPokemon(input));
+      const newPokemon = await postPokemon(input);
+      alert('New pokemón is created!');
+      dispatch({
+        type: POST_POKEMON,
+        payload: newPokemon
+      });
+
       setInput({
         name: '',
         hp: '',
@@ -106,7 +112,7 @@ const PokemonCreate = () => {
         types: [],
         img: ''
       });
-      dispatch(cleanPokemons(dispatch));
+      cleanPokemons(dispatch);
       history.push('/home')
     } else {
       alert('Error. Check the form');
