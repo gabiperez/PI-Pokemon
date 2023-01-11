@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { cleanPokemons, getPokemons } from '../../actions';
+import { cleanPokemons, getPokemons, GET_POKEMONS } from '../../actions';
 import Card from '../Card/Card';
 import Filters from '../Filters/Filters';
 import Pagination from '../Pagination/Pagination';
@@ -26,14 +26,23 @@ export default function Home() {
         setCurrentPage(pageNumber);
     }
 
+    function getPokemonsAndDispatch() {
+        getPokemons().then(data => {
+            dispatch({
+                type: GET_POKEMONS,
+                payload: data
+            })
+        });
+    }
+
     useEffect(() => {
-        dispatch(getPokemons())
-    }, [dispatch])
+        getPokemonsAndDispatch();
+    }, [])
 
     const handleClick = (e) => {
         e.preventDefault();
-        dispatch(cleanPokemons(dispatch));
-        dispatch(getPokemons());
+        cleanPokemons(dispatch);
+        getPokemonsAndDispatch();
     }
 
     return (

@@ -13,19 +13,17 @@ export const CLEAN_DETAIL = 'CLEAN_DETAIL';
 export const CLEAN_POKEMONS = 'CLEAN_POKEMONS';
 
 
-export const getPokemons = () => {
-    return async (dispatch) => {
-        try {
-            let url = 'http://localhost:3001/pokemons';
-            let json = await axios.get(url);
-            return dispatch({
-                type: GET_POKEMONS,
-                payload: json.data
-            });
-        } catch (e) {
-            console.log(e);
-        };
+export const getPokemons = async () => {
+
+    try {
+        let url = 'http://localhost:3001/pokemons';
+        let json = await axios.get(url);
+        return json.data;
+
+    } catch (e) {
+        console.log(e);
     };
+
 };
 
 export const cleanPokemons = (dispatch) => {
@@ -120,16 +118,8 @@ export const cleanDetail = (dispatch) => {
 
 
 export const postPokemon = async (payload) => {
-    try {
-        var createPoke = await axios.post('http://localhost:3001/pokemons', payload);
-        console.log(createPoke);
+    var createPoke = await axios.post('http://localhost:3001/pokemons', payload);
 
-        return createPoke;
-    } catch (e) {
-        window.alert(e.response.data)
-        alert('Pokemon name already exist')
-        // console.log(e);
-    }
-
+    return createPoke;
 };
 

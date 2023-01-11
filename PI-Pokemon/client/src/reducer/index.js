@@ -40,17 +40,18 @@ const rootReducer = (state = initialState, action) => {
             };
         case FILTER_CREATED:
             let copy = state.allPokemons;
-            let createdFiltered;
+            let filtered;
             if (action.payload === 'created') {
-                createdFiltered = copy.filter(e => e.createdInBd);
+                filtered = copy.filter(e => e.createdInDb);
             } else if (action.payload === 'api') {
-                createdFiltered = copy.filter(e => !e.createdInBd);
+                filtered = copy.filter(e => !e.createdInDb);
             } else {
-                createdFiltered = copy;
+                filtered = copy;
             }
+
             return {
                 ...state,
-                pokemons: createdFiltered
+                pokemons: filtered
             };
         case FILTER_TYPE:
             let copyTwo = state.pokemons;

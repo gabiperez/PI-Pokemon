@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
     try {
         if (name) {
-            console.info(allPokesName);
+            //console.info(allPokesName);
             let poke = allPokesName.filter(e => e.name.toLowerCase() === name.toLowerCase());
             poke.length ? res.status(200).send(poke) : res.status(404).send('Pokemon not found');
         } else {

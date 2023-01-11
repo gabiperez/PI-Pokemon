@@ -94,26 +94,30 @@ const PokemonCreate = () => {
       !errors.img
     ) {
 
-      const newPokemon = await postPokemon(input);
-      alert('New pokemón is created!');
-      dispatch({
-        type: POST_POKEMON,
-        payload: newPokemon
-      });
+      try {
+        const newPokemon = await postPokemon(input);
+        alert('New pokemón is created!');
+        dispatch({
+          type: POST_POKEMON,
+          payload: newPokemon
+        });
 
-      setInput({
-        name: '',
-        hp: '',
-        attack: '',
-        defense: '',
-        speed: '',
-        height: '',
-        weight: '',
-        types: [],
-        img: ''
-      });
-      cleanPokemons(dispatch);
-      history.push('/home')
+        setInput({
+          name: '',
+          hp: '',
+          attack: '',
+          defense: '',
+          speed: '',
+          height: '',
+          weight: '',
+          types: [],
+          img: ''
+        });
+        cleanPokemons(dispatch);
+        history.push('/home')
+      } catch (err) {
+        alert(err.response.data);
+      }
     } else {
       alert('Error. Check the form');
     }

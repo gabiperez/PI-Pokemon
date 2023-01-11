@@ -1,4 +1,5 @@
 const axios = require('axios');
+const Sequelize = require('sequelize');
 const { Pokemon, Type } = require('../db');
 
 async function getListOfPokemons() {
@@ -40,6 +41,7 @@ async function getListOfPokemons() {
                 speed: pokemon.data.stats[5].base_stat,
                 height: pokemon.data.height,
                 weight: pokemon.data.weight,
+                createdInDb: false
             }
         }));
 
@@ -76,6 +78,7 @@ async function getPokemonByName(name) {
             speed: pokemon.stats[5].base_stat,
             height: pokemon.height,
             weight: pokemon.weight,
+            createdInDb: false
         }
     } catch (e) {
         console.error(e.message);
@@ -132,6 +135,7 @@ async function getPokemonDetail(arg) {
             speed: data.stats[5].base_stat,
             height: data.height,
             weight: data.weight,
+            createdInDb: false
         };
         return pokemonData;
     } catch (e) {
@@ -150,54 +154,54 @@ const getDbInfo = async (name) => {
     let data = [];
 
     if (name) {
-        pokemon = await Pokemon.findOne({
-            where: { name },
+        console.info("voy a buscar un pokemon con name", name);
+        const pokemon = await Pokemon.findOne({
+            where: {
+                name: {
+                    [Sequelize.Op.iLike]: name
+                }
+            },
             include: {
                 model: Type,
-                attributes: ['name'],
-                through: {
-                    attributes: [],
-                },
             },
         });
 
         if (pokemon) {
-            data.push(pokemon.dataValues);
+            data.push(pokemon);
         }
-
     } else {
         data = await Pokemon.findAll({
             include: {
                 model: Type,
             },
-
         });
     }
 
+
     return data.map(p => {
-        const values = p.dataValues;
         return {
-            id: values.id,
-            name: values.name,
-            img: values.img,
-            types: values.types.map(type => {
+            id: p.dataValues.id,
+            name: p.dataValues.name,
+            img: p.dataValues.img,
+            types: p.dataValues.types.map(type => {
                 return ({
                     name: type.dataValues.name,
                     img: `https://typedex.app/app/images/ui/types/light/${type.dataValues.name}.svg`,
                 })
             }),
-            hp: values.hp,
-            attack: values.attack,
-            defense: values.defense,
-            speed: values.speed,
-            height: values.height,
-            weight: values.weight,
+            hp: p.dataValues.hp,
+            attack: p.dataValues.attack,
+            defense: p.dataValues.defense,
+            speed: p.dataValues.speed,
+            height: p.dataValues.height,
+            weight: p.dataValues.weight,
+            createdInDb: true
         }
 
     })
 };
 
-//TRAIGO TODOS LOS POKEMONES, API + DB.
+//TRAIGO TODOS LOS POKEMONES, API + DB
 
 /**
  * 
